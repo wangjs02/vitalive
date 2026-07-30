@@ -21,18 +21,42 @@ same datasets.
 Server layout:
 
 ```text
-/home/junshi/
-├── data/              # Shared data root, also ~/data
+/
+├── disk/
+│   └── coconut/
+│       └── junshi/
+│           └── data/  # Real shared data storage
+└── home/
+    └── junshi/
+        ├── data/      # Symlink to /disk/coconut/junshi/data, also ~/data
+        └── vitalive/
+            └── prod/  # Production code repo
+```
+
+The shared server data root should be stored at:
+
+```text
+/disk/coconut/junshi/data
+```
+
+Expose it through the stable home-directory path:
+
+```bash
+ln -s /disk/coconut/junshi/data /home/junshi/data
+```
+
+After that, `~/data` resolves through the symlink and remains the canonical
+path scripts should use.
+
+Dataset layout under the shared data root:
+
+```text
+/home/junshi/data/
 │   ├── VitalDB/
 │   ├── VitalSense/
 │   ├── COHFACE/
 │   ├── Guardian/
 │   └── VIPL-HR/
-└── vitalive/
-    └── prod/          # Production code repo
-        ├── scripts/
-        ├── model/
-        └── README.md
 ```
 
 Local workspace layout follows the same rule: keep data outside `prod/`.
@@ -99,9 +123,10 @@ For VitalDB, the Web API metadata should live under `~/data/VitalDB/metadata/`:
 └── VitalDB_labs_uncompressed.csv
 ```
 
-On the server, `~/data` resolves to `/home/junshi/data`. Scripts should expose
-an explicit data root argument or environment variable and default to the
-external shared data root, not to a folder inside `prod/`.
+On the server, `~/data` resolves to `/home/junshi/data`, which should be a
+symlink to `/disk/coconut/junshi/data`. Scripts should expose an explicit data
+root argument or environment variable and default to the external shared data
+root, not to a folder inside `prod/`.
 
 ## Model Artifacts
 
