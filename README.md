@@ -8,62 +8,96 @@ research workspace.
 ```text
 prod/
 ├── scripts/      # Reusable Python modules for data, model, codec, train, eval, and utils
-├── data/         # Local downloaded datasets and generated data; ignored by git
 ├── model/        # Local checkpoints, weights, and model outputs; ignored by git except .gitkeep
 └── README.md
 ```
 
 ## Data
 
-Download datasets and local generated data into `data/`. Each dataset should
-own its own folder, and each dataset folder should use the same internal
-structure:
+Data does not live inside `prod/`. The production code should read from the
+shared data root outside the project folder so multiple projects can reuse the
+same datasets.
+
+Server layout:
 
 ```text
-data/
+/home/junshi/
+├── data/              # Shared data root, also ~/data
+│   ├── VitalDB/
+│   ├── VitalSense/
+│   ├── COHFACE/
+│   ├── Guardian/
+│   └── VIPL-HR/
+└── vitalive/
+    └── prod/          # Production code repo
+        ├── scripts/
+        ├── model/
+        └── README.md
+```
+
+Local workspace layout follows the same rule: keep data outside `prod/`.
+
+```text
+Vitalive/
+├── data/              # Shared local data root
+└── code/
+    └── prod/          # Production code repo
+```
+
+Each dataset owns its own folder inside the shared data root. Keep source
+files, documentation, and processed outputs inside the owning dataset folder.
+
+```text
+~/data/
 ├── VitalDB/
-│   ├── docs/     # Dataset notes, metadata tables, API manifests, and paper notes
+│   ├── docs/     # Papers, dataset docs, metadata tables, and API/download notes
 │   ├── zip/      # Downloaded archives or compressed API responses
-│   ├── raw/      # Extracted or API-downloaded raw files
-│   └── clean/    # Cleaned, aligned, cached, or training-ready data
+│   ├── raw/      # Extracted files or direct API downloads
+│   └── processed/
+│       ├── clean_v1/
+│       ├── aligned_v1/
+│       └── sampled_5s_v1/
 ├── VitalSense/
 │   ├── docs/
 │   ├── zip/
 │   ├── raw/
-│   └── clean/
+│   └── processed/
 ├── COHFACE/
 │   ├── docs/
 │   ├── zip/
 │   ├── raw/
-│   └── clean/
+│   └── processed/
 ├── Guardian/
 │   ├── docs/
 │   ├── zip/
 │   ├── raw/
-│   └── clean/
+│   └── processed/
 └── VIPL-HR/
     ├── docs/
     ├── zip/
     ├── raw/
-    └── clean/
+    └── processed/
 ```
 
 Use `zip/` for original downloaded archives or compressed API responses, `raw/`
-for extracted files or direct API downloads, and `clean/` for processed outputs
-that are ready for model training or evaluation.
+for extracted files or direct API downloads, and `<dataset>/processed/<method>/`
+for cleaned, aligned, cached, or training-ready outputs. Each processing method
+or version should have its own folder so different preprocessing recipes can
+coexist without overwriting each other.
 
-For VitalDB, the Web API metadata should live under `data/VitalDB/docs/` or a
+For VitalDB, the Web API metadata should live under `~/data/VitalDB/docs/` or a
 more specific metadata subfolder inside it:
 
 ```text
-data/VitalDB/docs/
+~/data/VitalDB/docs/
 ├── VitalDB_cases_uncompressed.csv
 ├── VitalDB_trks_uncompressed.csv
 └── VitalDB_labs_uncompressed.csv
 ```
 
-The contents of `data/` are intentionally ignored because raw datasets and
-generated caches are large and environment-specific.
+On the server, `~/data` resolves to `/home/junshi/data`. Scripts should expose
+an explicit data root argument or environment variable and default to the
+external shared data root, not to a folder inside `prod/`.
 
 ## Model Artifacts
 

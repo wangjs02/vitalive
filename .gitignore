@@ -1,4 +1,5 @@
-# Local datasets and downloaded data
+# Data belongs in the shared external data root, not inside prod.
+# Keep this rule to prevent accidental dataset commits if prod/data is created.
 data/*
 
 # Local checkpoints, weights, and model outputs
