@@ -9,11 +9,14 @@ from typing import Any
 # Direct execution puts this directory first and would make `import vitaldb`
 # resolve this pipeline file instead of the third-party VitalDB package.
 PIPELINE_DIR = Path(__file__).resolve().parent
+SCRIPTS_DIR = PIPELINE_DIR.parent
 sys.path = [
     entry
     for entry in sys.path
     if Path(entry or ".").resolve() != PIPELINE_DIR
 ]
+if str(SCRIPTS_DIR) not in sys.path:
+    sys.path.insert(0, str(SCRIPTS_DIR))
 
 import numpy as np
 import torch

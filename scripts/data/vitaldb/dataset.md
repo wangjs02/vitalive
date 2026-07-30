@@ -15,7 +15,8 @@ Separate one-time VitalDB cleaning from PyTorch training-time access.
 
 ## Outputs
 
-- Disk-backed clean segment arrays under `data/processed/vitaldb`.
+- Disk-backed clean segment arrays under
+  `/home/junshi/data/VitalDB/processed/pretrain-7vitalsign-v1`.
 - Per-case `segments.csv` files defining stable time-based segment IDs.
 - Per-vital-sign `.npy` files that can be added incrementally.
 - `VitalDBDataset` samples as NumPy arrays shaped `[C, T]`, optionally formed
@@ -78,10 +79,26 @@ train_dataset.fit_transforms()
 
 Raw cases and clean arrays are never all retained in RAM.
 
+Default path layout:
+
+```text
+/home/junshi/data/VitalDB/
+├── metadata/
+│   ├── VitalDB_cases_uncompressed.csv
+│   ├── VitalDB_trks_uncompressed.csv
+│   └── VitalDB_labs_uncompressed.csv
+├── raw/
+│   ├── 0001.vital
+│   ├── 0002.vital
+│   └── ...
+└── processed/
+    └── pretrain-7vitalsign-v1/
+```
+
 Processed layout:
 
 ```text
-data/processed/vitaldb/
+/home/junshi/data/VitalDB/processed/pretrain-7vitalsign-v1/
 ├── metadata.json
 └── case_0001/
     ├── segments.csv
@@ -127,6 +144,14 @@ data = VitalDBData(vital_signs=["HR", "RR", "SBP"])
 data.clean(case_ids=[1, 2, 3])
 dataset = VitalDBDataset(data, id_list=data.ids)
 sample = dataset[0]
+```
+
+By default this uses:
+
+```text
+data_dir=/home/junshi/data/VitalDB/raw
+metadata_dir=/home/junshi/data/VitalDB/metadata
+clean_dir=/home/junshi/data/VitalDB/processed/pretrain-7vitalsign-v1
 ```
 
 To construct 600-second datapoints without changing the 60-second clean files:

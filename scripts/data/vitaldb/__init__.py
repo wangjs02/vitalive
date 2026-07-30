@@ -16,15 +16,6 @@ from .dataset import (
     get_vital_file_path_by_id,
     read_data_by_id,
 )
-from .download import (
-    download_case_tracks,
-    download_metadata,
-    download_track,
-    download_url,
-    find_track_id,
-    gunzip_file,
-    load_track_index,
-)
 from .visualize import (
     plot_case,
     plot_datapoint,
@@ -45,15 +36,8 @@ __all__ = [
     "SmoothVitalDB",
     "VitalDBData",
     "VitalDBDataset",
-    "download_case_tracks",
-    "download_metadata",
-    "download_track",
-    "download_url",
-    "find_track_id",
     "get_case_ids",
     "get_vital_file_path_by_id",
-    "gunzip_file",
-    "load_track_index",
     "plot_case",
     "plot_datapoint",
     "plot_segment",
