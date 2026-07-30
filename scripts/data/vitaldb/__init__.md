@@ -2,12 +2,14 @@
 
 ## Purpose
 
-Expose the incremental VitalDB cleaning, transform, dataset, and visualization API.
+Expose the VitalDB download, cleaning, transform, dataset, and visualization API.
 
 ## Inputs
 
 The package initializer has no runtime inputs. Exported classes accept VitalDB
 paths, vital-sign selections, clean-segment rules, and transform settings.
+Download helpers accept a production data root and optional case/track
+selection.
 
 ## Outputs
 
@@ -20,6 +22,11 @@ A concise package-level namespace for the new VitalDB data contract.
 - `get_case_ids`
 - `get_vital_file_path_by_id`
 - `read_data_by_id`
+- `download_metadata`
+- `download_case_tracks`
+- `download_track`
+- `find_track_id`
+- `load_track_index`
 - `ComposeVitalDB`
 - `SmoothVitalDB`
 - `DifferenceVitalDB`
@@ -37,6 +44,7 @@ A concise package-level namespace for the new VitalDB data contract.
 ## Dependencies
 
 - `data.vitaldb.dataset`
+- `data.vitaldb.download`
 - `data.vitaldb.visualize`
 
 ## Used By
@@ -48,6 +56,7 @@ New VitalDB preparation, pretraining, and model workflows.
 ```python
 from data.vitaldb import (
     ComposeVitalDB,
+    download_metadata,
     NormalizeVitalDB,
     VitalDBDataset,
 )
@@ -56,5 +65,6 @@ from data.vitaldb import (
 ## Failure Modes
 
 - Import fails when required numerical or PyTorch dependencies are unavailable.
+- Download helpers require network access when files are not already cached.
 - Old `VitalDB_Data`, `VitalDB_DataSet`, pretrain augmentation, and SimCLR pair
   APIs are intentionally not exported.
