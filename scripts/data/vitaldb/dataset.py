@@ -53,7 +53,7 @@ def vital_signs_to_tracks(vital_signs: Sequence[str]) -> dict[str, str]:
     return {role: DEFAULT_VITALSIGN[role] for role in selected}
 
 def get_case_ids(
-    metadata_dir: str | Path = "data/VitalDB/VitalDB Paper & Metadata",
+    metadata_dir: str | Path = "/home/junshi/data/VitalDB/metadata",
     vital_signs: Sequence[str] = tuple(DEFAULT_VITALSIGN),
 ) -> list[int]:
     """Return case IDs containing every requested vital-sign track."""
@@ -71,7 +71,7 @@ def get_case_ids(
 
 def get_vital_file_path_by_id(
     case_id: int,
-    data_dir: str | Path = "data/VitalDB/VitalDB Data",
+    data_dir: str | Path = "/home/junshi/data/VitalDB/raw",
 ) -> Path:
     """Return the local .vital path for one case ID."""
     data_root = Path(data_dir)
@@ -87,7 +87,7 @@ def get_vital_file_path_by_id(
 
 def _read_raw_data_by_id(
     case_id: int,
-    data_dir: str | Path = "data/VitalDB/VitalDB Data",
+    data_dir: str | Path = "/home/junshi/data/VitalDB/raw",
     vital_signs: Sequence[str] = tuple(DEFAULT_VITALSIGN),
     interval_sec: int = 2,
 ) -> pd.DataFrame:
@@ -590,7 +590,7 @@ class VitalDBData:
 
     Processed layout:
 
-    data/processed/vitaldb/
+    /home/junshi/data/VitalDB/processed/pretrain/
       metadata.json
       case_0001/
         segments.csv
@@ -601,9 +601,9 @@ class VitalDBData:
 
     def __init__(
         self,
-        data_dir: str | Path = "data/VitalDB/VitalDB Data",
-        metadata_dir: str | Path = "data/VitalDB/VitalDB Paper & Metadata",
-        clean_dir: str | Path = "data/processed/vitaldb",
+        data_dir: str | Path = "/home/junshi/data/VitalDB/raw",
+        metadata_dir: str | Path = "/home/junshi/data/VitalDB/metadata",
+        clean_dir: str | Path = "/home/junshi/data/VitalDB/processed/pretrain-7vitalsign-v1",
         vital_signs: Sequence[str] = tuple(DEFAULT_VITALSIGN),
         interval_sec: int = 2,
         segment_sec: int = 60,
@@ -961,7 +961,7 @@ __all__ = [
 
 def main() -> None:
     """Test incremental per-signal clean data through Dataset and DataLoader."""
-    test_dir = Path("data/processed/vitaldb_test")
+    test_dir = Path("/home/junshi/data/VitalDB/processed/test")
     data = VitalDBData(
         clean_dir=test_dir,
         vital_signs=["HR", "RR"],
