@@ -1,0 +1,12 @@
+# Local datasets and downloaded data
+data/*
+
+# Local checkpoints, weights, and model outputs
+model/*
+!model/.gitkeep
+
+# Python/runtime noise
+__pycache__/
+*.py[cod]
+.DS_Store
+.ipynb_checkpoints/
