@@ -50,7 +50,8 @@ files, documentation, and processed outputs inside the owning dataset folder.
 ```text
 ~/data/
 ├── VitalDB/
-│   ├── docs/     # Papers, dataset docs, metadata tables, and API/download notes
+│   ├── docs/     # Papers, dataset documentation, and download notes
+│   ├── metadata/ # Case, track, and lab metadata tables
 │   ├── zip/      # Downloaded archives or compressed API responses
 │   ├── raw/      # Extracted files or direct API downloads
 │   └── processed/
@@ -59,21 +60,25 @@ files, documentation, and processed outputs inside the owning dataset folder.
 │       └── sampled_5s_v1/
 ├── VitalSense/
 │   ├── docs/
+│   ├── metadata/
 │   ├── zip/
 │   ├── raw/
 │   └── processed/
 ├── COHFACE/
 │   ├── docs/
+│   ├── metadata/
 │   ├── zip/
 │   ├── raw/
 │   └── processed/
 ├── Guardian/
 │   ├── docs/
+│   ├── metadata/
 │   ├── zip/
 │   ├── raw/
 │   └── processed/
 └── VIPL-HR/
     ├── docs/
+    ├── metadata/
     ├── zip/
     ├── raw/
     └── processed/
@@ -85,11 +90,10 @@ for cleaned, aligned, cached, or training-ready outputs. Each processing method
 or version should have its own folder so different preprocessing recipes can
 coexist without overwriting each other.
 
-For VitalDB, the Web API metadata should live under `~/data/VitalDB/docs/` or a
-more specific metadata subfolder inside it:
+For VitalDB, the Web API metadata should live under `~/data/VitalDB/metadata/`:
 
 ```text
-~/data/VitalDB/docs/
+~/data/VitalDB/metadata/
 ├── VitalDB_cases_uncompressed.csv
 ├── VitalDB_trks_uncompressed.csv
 └── VitalDB_labs_uncompressed.csv
