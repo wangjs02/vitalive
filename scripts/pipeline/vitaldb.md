@@ -97,7 +97,7 @@ test_metrics = result["test_metrics"]
 Run the configured end-to-end workflow from the command line:
 
 ```bash
-python -m scripts.pipeline.vitaldb
+PYTHONPATH=scripts python -m pipeline.vitaldb
 ```
 
 ## Failure Modes
