@@ -94,6 +94,15 @@ checkpoint = result["checkpoint"]
 test_metrics = result["test_metrics"]
 ```
 
+Current code defaults:
+
+```text
+ROOT_DIR = /home/junshi/
+data_dir = /home/junshi/VitalDB/raw
+metadata_dir = /home/junshi/data/VitalDB/metadata
+clean_dir = /home/junshi/data/VitalDB/processed/pretrain-7vitalsign-v1
+```
+
 Run the configured end-to-end workflow from the command line:
 
 ```bash

@@ -79,7 +79,23 @@ train_dataset.fit_transforms()
 
 Raw cases and clean arrays are never all retained in RAM.
 
-Default path layout:
+Current code defaults are split between helper-level absolute paths and
+`VitalDBData` constructor-relative paths:
+
+```text
+ROOT_DIR = /home/junshi/
+
+Helper defaults:
+- metadata_dir = /home/junshi/data/VitalDB/metadata
+- data_dir = /home/junshi/data/VitalDB/raw
+
+VitalDBData(...) defaults:
+- data_dir = data/VitalDB/raw
+- metadata_dir = data/VitalDB/metadata
+- clean_dir = data/vitaldb/processed/pretrain-7vitalsign-v1
+```
+
+Server path layout used by the helper functions:
 
 ```text
 /home/junshi/data/VitalDB/
@@ -149,9 +165,9 @@ sample = dataset[0]
 By default this uses:
 
 ```text
-data_dir=/home/junshi/data/VitalDB/raw
-metadata_dir=/home/junshi/data/VitalDB/metadata
-clean_dir=/home/junshi/data/VitalDB/processed/pretrain-7vitalsign-v1
+helper data_dir=/home/junshi/data/VitalDB/raw
+helper metadata_dir=/home/junshi/data/VitalDB/metadata
+constructor clean_dir=data/vitaldb/processed/pretrain-7vitalsign-v1
 ```
 
 To construct 600-second datapoints without changing the 60-second clean files:

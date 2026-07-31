@@ -12,7 +12,7 @@ import torch
 from torch.utils.data import DataLoader, Dataset
 
 ArrayTransform = Callable[[np.ndarray], np.ndarray]
-ROOT_DIR = '/home/junshi/'
+ROOT_DIR = '/home/junshi//data/VitalDB'
 
 DEFAULT_VITALSIGN = {
     "HR": "Solar8000/HR",
@@ -53,7 +53,7 @@ def vital_signs_to_tracks(vital_signs: Sequence[str]) -> dict[str, str]:
     return {role: DEFAULT_VITALSIGN[role] for role in selected}
 
 def get_case_ids(
-    metadata_dir: str | Path = f"{ROOT_DIR}/data/VitalDB/metadata",
+    metadata_dir: str | Path = f"{ROOT_DIR}/metadata",
     vital_signs: Sequence[str] = tuple(DEFAULT_VITALSIGN),
 ) -> list[int]:
     """Return case IDs containing every requested vital-sign track."""
@@ -71,7 +71,7 @@ def get_case_ids(
 
 def get_vital_file_path_by_id(
     case_id: int,
-    data_dir: str | Path = f"{ROOT_DIR}/data/VitalDB/raw",
+    data_dir: str | Path = f"{ROOT_DIR}/raw",
 ) -> Path:
     """Return the local .vital path for one case ID."""
     data_root = Path(data_dir)
@@ -87,7 +87,7 @@ def get_vital_file_path_by_id(
 
 def _read_raw_data_by_id(
     case_id: int,
-    data_dir: str | Path = f"{ROOT_DIR}/data/VitalDB/raw",
+    data_dir: str | Path = f"{ROOT_DIR}/raw",
     vital_signs: Sequence[str] = tuple(DEFAULT_VITALSIGN),
     interval_sec: int = 2,
 ) -> pd.DataFrame:
@@ -961,7 +961,7 @@ __all__ = [
 
 def main() -> None:
     """Test incremental per-signal clean data through Dataset and DataLoader."""
-    test_dir = Path(f"{ROOT_DIR}/data/vitaldb/processed/test")
+    test_dir = Path(f"{ROOT_DIR}/processed/test")
     data = VitalDBData(
         clean_dir=test_dir,
         vital_signs=["HR", "RR"],
