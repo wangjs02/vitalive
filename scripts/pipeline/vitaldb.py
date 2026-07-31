@@ -14,6 +14,7 @@ sys.path = [
     for entry in sys.path
     if Path(entry or ".").resolve() != PIPELINE_DIR
 ]
+ROOT_DIR = '/home/junshi/'
 
 import numpy as np
 import torch
@@ -272,9 +273,9 @@ def pretrain(
     *,
     project_root: str | Path = ".",
     name: str = "vitaldb_vit_7x600_vqvae_rot",
-    data_dir: str | Path = "data/VitalDB/raw",
-    metadata_dir: str | Path = "data/VitalDB/metadata",
-    clean_dir: str | Path = "data/VitalDB/processed",
+    data_dir: str | Path = f"{ROOT_DIR}/VitalDB/raw",
+    metadata_dir: str | Path = f"{ROOT_DIR}/data/VitalDB/metadata",
+    clean_dir: str | Path = f"{ROOT_DIR}/data/VitalDB/processed/pretrain-7vitalsign-v1",
     vital_signs: Sequence[str] = ("HR", "SpO2", "RR", "BT", "SBP", "DBP", "MBP"),
     time_length: int = 600,
     input_frequency_hz: float = 0.5,
@@ -603,8 +604,8 @@ def main() -> None:
     pretrain(
         project_root=Path(__file__).resolve().parents[3],
         vital_signs=("HR", "SpO2", "RR", "BT", "SBP", "DBP", "MBP"),
-        time_length=600,
-        epochs=30,
+        time_length=60,
+        epochs=10,
         batch_size=32,
         learning_rate=3e-4,
         weight_decay=1e-4,
