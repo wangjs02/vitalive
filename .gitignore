@@ -2,6 +2,9 @@
 # Keep this rule to prevent accidental dataset commits if prod/data is created.
 data/*
 
+# nohup logs
+log/
+
 # Local checkpoints, weights, and model outputs
 model/*
 !model/.gitkeep

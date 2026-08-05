@@ -82,7 +82,6 @@ def run_vqvae_epoch(
         else:
             with torch.no_grad():
                 out = model(x)
-
         batch_size = x.size(0)
         n_samples += batch_size
         totals["loss"] += float(out["loss"].detach().cpu()) * batch_size

@@ -26,7 +26,7 @@ class Checkpoint:
         project_root: str | Path,
         subdir: str,
         run_id: str | None = None,
-        checkpoint_base: str | Path = "model/checkpoints",
+        checkpoint_base: str | Path = "/home/junshi/vitalive/model/checkpoints",
     ) -> "Checkpoint":
         """Create a timestamped run directory and its standard paths."""
         checkpoint_id = run_id or datetime.now().strftime("%Y%m%d-%H%M%S")

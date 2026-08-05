@@ -9,11 +9,17 @@ from typing import Any
 # Direct execution puts this directory first and would make `import vitaldb`
 # resolve this pipeline file instead of the third-party VitalDB package.
 PIPELINE_DIR = Path(__file__).resolve().parent
+SCRIPT_ROOT = PIPELINE_DIR.parent
+
 sys.path = [
     entry
     for entry in sys.path
     if Path(entry or ".").resolve() != PIPELINE_DIR
 ]
+
+if str(SCRIPT_ROOT) not in sys.path:
+    sys.path.insert(0, str(SCRIPT_ROOT))
+
 ROOT_DIR = '/home/junshi/data/VitalDB'
 
 import numpy as np
@@ -271,7 +277,7 @@ class VitalDBCheckpoint(Checkpoint):
 
 def pretrain(
     *,
-    project_root: str | Path = ".",
+    project_root: str | Path = "/home/junshi/vitalive",
     name: str = "vitaldb_vit_7x600_vqvae_rot",
     data_dir: str | Path = f"{ROOT_DIR}/raw",
     metadata_dir: str | Path = f"{ROOT_DIR}/metadata",
@@ -396,9 +402,33 @@ def pretrain(
         time_length=time_length,
     )
 
-    train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
-    val_loader = DataLoader(val_dataset, batch_size=batch_size, shuffle=False)
-    test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False)
+    use_cuda = torch.device(device).type == "cuda"
+    loader_kwargs = {
+        "num_workers": 8,
+        "pin_memory": use_cuda,
+        "persistent_workers": True,
+    }
+
+    train_loader = DataLoader(
+        train_dataset,
+        batch_size=batch_size,
+        shuffle=True,
+        **loader_kwargs,
+    )
+
+    val_loader = DataLoader(
+        val_dataset,
+        batch_size=batch_size,
+        shuffle=False,
+        **loader_kwargs,
+    )
+
+    test_loader = DataLoader(
+        test_dataset,
+        batch_size=batch_size,
+        shuffle=False,
+        **loader_kwargs,
+    )
 
     device = torch.device(device)
     model_time_length = int(round(time_length * target_frequency_hz))
@@ -422,6 +452,7 @@ def pretrain(
         use_quantizer=True,
     )
     model = VitalDBVQVAE(model_config).to(device)
+    print(f"model device: {next(model.parameters()).device}")
     optimizer = build_adamw_optimizer(
         model,
         lr=learning_rate,
@@ -604,17 +635,17 @@ def main() -> None:
     pretrain(
         project_root=Path(__file__).resolve().parents[3],
         vital_signs=("HR", "SpO2", "RR", "BT", "SBP", "DBP", "MBP"),
-        time_length=60,
+        time_length=600,
         epochs=10,
-        batch_size=32,
+        batch_size=32*64,
         learning_rate=3e-4,
         weight_decay=1e-4,
         patience=5,
         min_delta=1e-4,
-        device="cpu",
-        train_case_limit=1000,
-        val_case_limit=100,
-        test_case_limit=100,
+        device = "cuda" if torch.cuda.is_available() else "cpu",
+        # train_case_limit=1000,
+        # val_case_limit=100,
+        # test_case_limit=100,
     )
 
 
